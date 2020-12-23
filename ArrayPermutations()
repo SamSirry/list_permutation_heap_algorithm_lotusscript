@@ -1,0 +1,34 @@
+%REM
+		Description: Array permutation function based on the Heap algorithm. Returns all possible configurations 
+			of array elements, as a ListOfVariant where each element in the list is one array configuration.
+		Created Dec 22, 2020 by Sam Sirry
+%END REM
+Public Function ArrayPermutations(array As Variant, array_max_idx As Long) As ListOfVariant
+	Dim Result As New ListOfVariant
+	
+	If (array_max_idx = 0) Then
+		Call Result.Add(array)
+		GoTo Quit
+	End If
+
+	Call Result.AssimilateListOfVariant(ArrayPermutations(array, array_max_idx - 1))
+	
+	Dim i As Long
+	For i = 0 To array_max_idx-1
+		Dim tmp
+		If array_max_idx Mod 2 = 0 Then
+			tmp = array(0)
+			array(0) = array(array_max_idx)
+			array(array_max_idx) = tmp
+		Else
+			tmp = array(i)
+			array(i) = array(array_max_idx)
+			array(array_max_idx) = tmp
+		End If
+		
+		Call Result.AssimilateListOfVariant(ArrayPermutations(array, array_max_idx - 1))
+	Next
+	
+Quit:
+	Set ArrayPermutations = Result
+End Function
